@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @Entity
 @Getter
@@ -16,7 +15,6 @@ import java.util.List;
 public class Curso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name = "curso_id")
     private Long id;
 
@@ -24,7 +22,4 @@ public class Curso {
     private String nombre;
 
     private String categoria;
-
-    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Topico> publicaciones;
 }

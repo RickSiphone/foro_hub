@@ -1,5 +1,6 @@
 package com.aluracursos.forohub.domain.modelos;
 
+import com.aluracursos.forohub.domain.dto.RegistroTopico;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -20,20 +21,33 @@ public class Topico {
     @Column(name = "topico_id")
     private Long id;
 
+    @Column(unique = true)
     private String titulo;
 
+    @Column(unique = true)
     private String mensaje;
 
+    @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 
     private String status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    //Tengo que indicar el nombre de la columna en la base de datos de la tabla Topico, no de Usuario
+    //No tengo que poner el nombre de la columna de la tabla Usuario
+    @JoinColumn(name = "autor_id")
     private Usuario autor;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "curso_id")
     private Curso curso;
 
-    @OneToMany(mappedBy = "topico",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private List<Respuesta> respuestas;
+    public Topico(RegistroTopico registroTopico, LocalDateTime fechaCreacion, Usuario autor, Curso curso){
+        this.titulo = registroTopico.titulo();
+        this.mensaje = registroTopico.mensaje();
+        this.fechaCreacion = fechaCreacion;
+        this.status = "ABIERTO";
+        this.autor = autor;
+        this.curso = curso;
+    }
 }

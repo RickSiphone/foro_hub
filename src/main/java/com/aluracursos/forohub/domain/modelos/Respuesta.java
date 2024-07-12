@@ -16,17 +16,19 @@ import java.time.LocalDateTime;
 public class Respuesta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "respuesta_id")
     private Long id;
 
     private String mensaje;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "topico_id")
     private Topico topico;
 
+    @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "autor_id")
     private Usuario autor;
 
     private String solucion;

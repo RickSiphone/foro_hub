@@ -16,11 +16,10 @@ import java.util.List;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name = "usuario_id")
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, name = "nombre_usuario")
     private String nombreUsuario;
 
     @Column(unique = true)
@@ -31,9 +30,4 @@ public class Usuario {
 
     private String contrasena;
 
-    @OneToMany(mappedBy = "autor",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Topico> publicacionesRealizadas;
-
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Respuesta> respuestas;
 }
