@@ -9,6 +9,8 @@ import com.aluracursos.forohub.domain.repository.TopicoRepository;
 import com.aluracursos.forohub.domain.repository.UsuarioRepository;
 import com.aluracursos.forohub.infra.excepciones.ObjetoInexistenteException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,16 +42,22 @@ public class TopicoService {
         LocalDateTime fechaCreacion = LocalDateTime.now();
         Topico nuevoTopico = new Topico(registroTopico,fechaCreacion,usuario.get(),curso.get());
         //Agregar validacion para ver si ya existe un topico con el mismo titulo y mensaje
+        repositorioTopico.save(nuevoTopico);
         return new DatosRespuestaTopico(nuevoTopico.getId(),nuevoTopico.getTitulo(),nuevoTopico.getMensaje(),
                 nuevoTopico.getFechaCreacion(),nuevoTopico.getStatus(),nuevoTopico.getAutor().getId(),
                 nuevoTopico.getCurso().getId());
     }
 
-    public DetallesTopico visitarTopico(Long id){
+    public DetallesTopico visitarTopico(Long id) {
         Topico topico = repositorioTopico.getReferenceById(id);
         return new DetallesTopico(topico.getId(),topico.getTitulo(),topico.getMensaje(),
                 topico.getFechaCreacion(),topico.getStatus(),
-                new DatosUsuario(topico.getAutor().getNombreUsuario(),topico.getAutor().getEmail()),
-                new DatosCurso(topico.getCurso().getNombre(),topico.getCurso().getCategoria()));
+                new DatosUsuario(topico.getAutor().getId(),topico.getAutor().getNombreUsuario(),topico.getAutor().getEmail()),
+                new DatosCurso(topico.getCurso().getId(),topico.getCurso().getNombre(),topico.getCurso().getCategoria()));
+    }
+
+    public Page<DatosRespuestaTopico> listarTopicos(Pageable paginacion) {
+        return repositorioTopico.findAll(paginacion)
+                .map(DatosRespuestaTopico::new);
     }
 }

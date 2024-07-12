@@ -1,10 +1,14 @@
 package com.aluracursos.forohub.controller;
 
 import com.aluracursos.forohub.domain.dto.DatosRespuestaTopico;
+import com.aluracursos.forohub.domain.dto.DetallesTopico;
 import com.aluracursos.forohub.domain.dto.RegistroTopico;
 import com.aluracursos.forohub.service.TopicoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -30,5 +34,11 @@ public class TopicoController {
     public ResponseEntity verTopicoEspecifico(@PathVariable Long id) {
         var response = topicoService.visitarTopico(id);
         return ResponseEntity.ok(response);
+    }
+
+    //Mostraré todos los datos de usuario y curso o solo los id's?
+    @GetMapping
+    public ResponseEntity<Page<DatosRespuestaTopico>> listarTopicos(@PageableDefault(sort="fechaCreacion",size = 10) Pageable paginacion) {
+        return ResponseEntity.ok(topicoService.listarTopicos(paginacion));
     }
 }
