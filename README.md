@@ -93,6 +93,7 @@ Para la realización de este proyecto se utilizó:
 * Lenguaje de programación: Java
 * JDK 17.0.10
 * IDE IntelliJ IDEA Community Edition 2024.1.2
+
 Dependencias utilizadas:
 *	Spring Boot DevTools
 *	Lombok
