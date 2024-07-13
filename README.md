@@ -74,12 +74,12 @@ Prueba de que se eliminó:
 A partir de aqui hay dos formas para ejecutar el proyecto
 
 **Paso 3.1. Usando algún IDE como por ejemplo Intellij para poder abrir el proyecto y así poder ejecutarlo**
-**Paso 3.2. Ejecutarlo desde la terminal**: Para hacer esto, hay 2 formas de ejecutar el JAR que está ubicado en la carpeta de Target
+**Paso 3.2. Ejecutarlo desde la terminal**: Para hacer esto, hay 2 formas de ejecutar el JAR
 
-***Paso 3.2.1. Sin indicar el perfil**: Basta con ejecutar el comando Java -jar target/forohub-0.0.1-SNAPSHOT.jar
+***Paso 3.2.1. Sin indicar el perfil**: Basta con ejecutar el comando Java -jar forohub-0.0.1-SNAPSHOT.jar
 
 ***Paso 3.2.2. Indicando el perfil**: Para este proyecto solo está definido el perfil de producción, pero en caso de poner más perfiles solo lo sustituyes por el nombre de ese perfil. Poner el siguiente comando:
-java -DDB_HOST=localhost -DDB_CHALLENGE=nombreDeLaBaseDeDatos -DDB_USER=nombreUsuarioDBMS -DDB_PASSWORD=contraseñaDBMS  -jar target/forohub-0.0.1-SNAPSHOT.jar –spring.profiles.active=prod
+java -DDB_HOST=localhost -DDB_CHALLENGE=nombreDeLaBaseDeDatos -DDB_USER=nombreUsuarioDBMS -DDB_PASSWORD=contraseñaDBMS  -jar forohub-0.0.1-SNAPSHOT.jar –spring.profiles.active=prod
 
 
 **Paso 4. LISTO!!**: La API ya se abrá montado dependiendo de la forma de ejecución que hayas seleccionado
