@@ -79,12 +79,16 @@ public class TopicoService {
             topicoEncontrado.setMensaje(actualizarTopico.mensaje());
         } else  {
             if (actualizarTopico.mensaje() != null) {
+                validaciones.forEach(e -> e.validarTopico(topicoEncontrado.getTitulo(),actualizarTopico.mensaje()));
                 topicoEncontrado.setMensaje(actualizarTopico.mensaje());
             }
             Long id_curso = actualizarTopico.curso_id();
             if (id_curso != null) {
                 Curso curso = repositorioCurso.getReferenceById(id_curso);
                 topicoEncontrado.setCurso(curso);
+            }
+            if(actualizarTopico.status() != null) {
+                topicoEncontrado.setStatus(actualizarTopico.status());
             }
         }
         repositorioTopico.save(topicoEncontrado);

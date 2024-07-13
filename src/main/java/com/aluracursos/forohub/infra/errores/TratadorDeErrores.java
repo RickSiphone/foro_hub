@@ -7,6 +7,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 @RestControllerAdvice
 public class TratadorDeErrores {
 
@@ -26,5 +28,10 @@ public class TratadorDeErrores {
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity tratarErrorBodyIncorrecto(){
         return ResponseEntity.badRequest().body("Debes enviar mínimo el mensaje para poder modificar el tópico");
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity tratarErrorRegistroInexistente(){
+        return ResponseEntity.badRequest().body("El objeto enviado no existe");
     }
 }
