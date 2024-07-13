@@ -7,6 +7,8 @@ import com.aluracursos.forohub.domain.repository.TopicoRepository;
 import com.aluracursos.forohub.domain.repository.UsuarioRepository;
 import com.aluracursos.forohub.infra.excepciones.ObjetoInexistenteException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -51,5 +53,10 @@ public class RespuestaService {
                     respuesta.getFechaCreacion());
         }
         throw new ObjetoInexistenteException("No existe la respuesta buscada");
+    }
+
+    public Page<DatosRespuesta> listarRespuestas(Pageable paginacion) {
+        return repositorioRespuesta.findAll(paginacion)
+                .map(DatosRespuesta::new);
     }
 }
