@@ -2,9 +2,9 @@ package com.aluracursos.forohub.controller;
 
 import com.aluracursos.forohub.domain.dto.ActualizarTopico;
 import com.aluracursos.forohub.domain.dto.DatosRespuestaTopico;
-import com.aluracursos.forohub.domain.dto.DetallesTopico;
 import com.aluracursos.forohub.domain.dto.RegistroTopico;
 import com.aluracursos.forohub.service.TopicoService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,8 +44,15 @@ public class TopicoController {
     }
 
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity actualizarTopico(@PathVariable Long id, @RequestBody @Valid ActualizarTopico actualizarTopico) {
         var response = topicoService.actualizarTopico(id,actualizarTopico);
         return ResponseEntity.accepted().body(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity eliminarTopico(@PathVariable Long id) {
+        topicoService.borrarTopico(id);
+        return ResponseEntity.ok().body("Se ha eliminado con éxito el tópico indicado");
     }
 }

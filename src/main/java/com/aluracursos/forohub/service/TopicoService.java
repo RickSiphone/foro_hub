@@ -100,4 +100,13 @@ public class TopicoService {
                 new DatosCurso(topicoEncontrado.getCurso().getId(),topicoEncontrado.getCurso().getNombre(),
                         topicoEncontrado.getCurso().getCategoria()));
     }
+
+    public void borrarTopico(Long id) {
+        boolean existeTopico = repositorioTopico.existsById(id);
+        if (existeTopico) {
+            repositorioTopico.deleteById(id);
+        } else {
+            throw new ObjetoInexistenteException("No existe el tópico indicado");
+        }
+    }
 }
