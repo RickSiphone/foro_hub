@@ -1,11 +1,13 @@
 package com.aluracursos.forohub.controller;
 
 import com.aluracursos.forohub.domain.dto.DatosRespuesta;
+import com.aluracursos.forohub.domain.dto.ModificarRespuesta;
 import com.aluracursos.forohub.domain.dto.ResponderPublicacion;
 import com.aluracursos.forohub.domain.repository.RespuestaRepository;
 import com.aluracursos.forohub.service.RespuestaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,6 +49,20 @@ public class RespuestaController {
     @Operation(summary = "Permite ver todas las respuestas que se encuentran en el foro")
     public ResponseEntity<Page<DatosRespuesta>> listarRespuestas(@PageableDefault(sort="fechaCreacion",size = 10) Pageable paginacion){
         return ResponseEntity.ok(respuestaService.listarRespuestas(paginacion));
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    @Operation(summary = "Permite actualizar el contenido de la respuesta publicada")
+    public ResponseEntity actualizarRespuesta(@PathVariable Long id, @RequestBody @Valid ModificarRespuesta modificarRespuesta) {
+        var response = respuestaService.modificarRespuesta(id,modificarRespuesta);
+        return ResponseEntity.accepted().body(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity borrarRespuesta(@PathVariable Long id) {
+        respuestaService.eliminarRespuesta(id);
+        return ResponseEntity.ok().body("Se ha eliminado la respuesta solicitada");
     }
 
 }

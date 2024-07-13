@@ -91,6 +91,9 @@ public class TopicoService {
                 topicoEncontrado.setStatus(actualizarTopico.status());
             }
         }
+        //Se actualiza la fecha de creación por la modificación al tópico o publicación
+        LocalDateTime fechaCreacion = LocalDateTime.now();
+        topicoEncontrado.setFechaCreacion(fechaCreacion);
         repositorioTopico.save(topicoEncontrado);
 
         return new DetallesTopico(topicoEncontrado.getId(),topicoEncontrado.getTitulo(),topicoEncontrado.getMensaje(),

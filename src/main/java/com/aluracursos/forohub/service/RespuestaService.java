@@ -59,4 +59,24 @@ public class RespuestaService {
         return repositorioRespuesta.findAll(paginacion)
                 .map(DatosRespuesta::new);
     }
+
+    public DatosRespuesta modificarRespuesta(Long id,ModificarRespuesta modificarRespuesta) {
+        var existeRespuesta = repositorioRespuesta.findById(id);
+        if(!existeRespuesta.isEmpty()) {
+            throw new ObjetoInexistenteException("La respuesta buscada no existe");
+        }
+        var respuesta = existeRespuesta.get();
+        respuesta.setSolucion(modificarRespuesta.solución());
+        LocalDateTime fechaCreacion = LocalDateTime.now();
+        respuesta.setFechaCreacion(fechaCreacion);
+        repositorioRespuesta.save(respuesta);
+        return new DatosRespuesta(respuesta);
+    }
+
+    public void eliminarRespuesta(Long id) {
+        boolean existeRespuesta = repositorioRespuesta.existsById(id);
+        if (existeRespuesta) {
+            repositorioRespuesta.deleteById(id);
+        }
+    }
 }

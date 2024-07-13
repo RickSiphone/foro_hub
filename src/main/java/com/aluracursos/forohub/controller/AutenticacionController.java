@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
-@Tag(name = "Autenticacion", description = "Obtiene un token que le permite al usuario asignado el acceso a los endpoints correspondientes, pero el token expira 2 horas después de haberlo solicitado, por lo que deberá solicitarse otro o solicitar al equipo de Backend que aumente el tiempo de expiración")
+@Tag(name = "Autenticación", description = "Obtiene un token que le permite al usuario asignado el acceso a los endpoints correspondientes, pero el token expira 2 horas después de haberlo solicitado, por lo que deberá solicitarse otro o solicitar al equipo de Backend que aumente el tiempo de expiración")
 public class AutenticacionController {
 
     @Autowired
@@ -29,6 +29,7 @@ public class AutenticacionController {
     @PostMapping
     public ResponseEntity autenticarUsuario(@RequestBody @Valid DatosLoginUsuario datosLoginUsuario) {
         Authentication authToken = new UsernamePasswordAuthenticationToken(datosLoginUsuario.nombreUsuario(),datosLoginUsuario.clave());
+        //Aqui se verifican las credenciales dadas en el login con las existentes en la tabla de Usuarios
         var usuarioAutenticado = authenticationManager.authenticate(authToken);
         var JWTtoken = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
         return ResponseEntity.ok(new DatosJWT(JWTtoken));

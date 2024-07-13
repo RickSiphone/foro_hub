@@ -17,6 +17,12 @@ import java.time.ZoneOffset;
 public class TokenService {
     @Value("${api.security.secret}")
     private String api_secret;
+
+    //Al utilizarse una autenticación STATELESS en este punto el usuario ya fue verificado en la base de datos, por lo que siempre se va a generar
+    //un token tomando como argumento una contraseña fija que es api_secret
+    //Lo que aumenta la "seguridad" podría ser generar una api_secret para cada usuario tomando una api_secret fija y combinarla o combinar la info del usuario
+    //para poder generarla. Esto solo evitaría que alguien externo conozca la contraseña pivote para generar un token pero al realizar esto
+    //puede resultar más conveniente implementar otro tipo de autorización
     public String generarToken(Usuario usuario){
         var expiracion = generarFechaExpiracion(2,"-06:00");
         try {
