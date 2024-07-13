@@ -1,5 +1,6 @@
 package com.aluracursos.forohub.controller;
 
+import com.aluracursos.forohub.domain.dto.ActualizarTopico;
 import com.aluracursos.forohub.domain.dto.DatosRespuestaTopico;
 import com.aluracursos.forohub.domain.dto.DetallesTopico;
 import com.aluracursos.forohub.domain.dto.RegistroTopico;
@@ -40,5 +41,11 @@ public class TopicoController {
     @GetMapping
     public ResponseEntity<Page<DatosRespuestaTopico>> listarTopicos(@PageableDefault(sort="fechaCreacion",size = 10) Pageable paginacion) {
         return ResponseEntity.ok(topicoService.listarTopicos(paginacion));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity actualizarTopico(@PathVariable Long id, @RequestBody @Valid ActualizarTopico actualizarTopico) {
+        var response = topicoService.actualizarTopico(id,actualizarTopico);
+        return ResponseEntity.accepted().body(response);
     }
 }

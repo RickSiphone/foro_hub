@@ -2,16 +2,13 @@ package com.aluracursos.forohub.domain.modelos;
 
 import com.aluracursos.forohub.domain.dto.RegistroTopico;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -32,13 +29,13 @@ public class Topico {
 
     private String status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     //Tengo que indicar el nombre de la columna en la base de datos de la tabla Topico, no de Usuario
     //No tengo que poner el nombre de la columna de la tabla Usuario
     @JoinColumn(name = "autor_id")
     private Usuario autor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "curso_id")
     private Curso curso;
 

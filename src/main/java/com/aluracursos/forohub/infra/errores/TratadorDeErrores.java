@@ -22,4 +22,9 @@ public class TratadorDeErrores {
     public ResponseEntity tratarErrorRutaInexistente(){
         return ResponseEntity.notFound().build();
     }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity tratarErrorBodyIncorrecto(){
+        return ResponseEntity.badRequest().body("Debes enviar mínimo el mensaje para poder modificar el tópico");
+    }
 }

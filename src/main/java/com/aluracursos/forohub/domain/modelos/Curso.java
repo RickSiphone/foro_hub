@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -22,4 +24,7 @@ public class Curso {
     private String nombre;
 
     private String categoria;
+
+    @OneToMany(mappedBy = "curso",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Topico> publicaciones;
 }

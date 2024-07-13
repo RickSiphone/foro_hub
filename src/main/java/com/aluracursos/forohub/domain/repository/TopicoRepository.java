@@ -15,4 +15,6 @@ public interface TopicoRepository extends JpaRepository<Topico,Long> {
             WHERE t.titulo = :titulo AND t.mensaje = :mensaje
             """)
     Optional<Topico> findByTituloAndMensaje(String titulo, String mensaje);
+
+    boolean existsByTituloAndMensaje(String titulo, String mensaje);
 }

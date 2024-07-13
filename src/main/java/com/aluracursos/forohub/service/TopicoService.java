@@ -7,6 +7,7 @@ import com.aluracursos.forohub.domain.modelos.Usuario;
 import com.aluracursos.forohub.domain.repository.CursoRepository;
 import com.aluracursos.forohub.domain.repository.TopicoRepository;
 import com.aluracursos.forohub.domain.repository.UsuarioRepository;
+import com.aluracursos.forohub.domain.validaciones.TopicoExistenteValidacion;
 import com.aluracursos.forohub.infra.excepciones.ObjetoInexistenteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -29,6 +31,9 @@ public class TopicoService {
     @Autowired
     private TopicoRepository repositorioTopico;
 
+    @Autowired
+    private List<TopicoExistenteValidacion> validaciones;
+
     public DatosRespuestaTopico registrarTopico(RegistroTopico registroTopico) {
         Optional<Usuario> usuario = repositorioUsuario.findById(registroTopico.autor_id());
         if (usuario.isEmpty()) {
@@ -38,6 +43,7 @@ public class TopicoService {
         if (curso.isEmpty()) {
             throw new ObjetoInexistenteException("El curso indicado no existe");
         }
+        validaciones.forEach(e -> e.validarTopico(registroTopico.titulo(),registroTopico.mensaje()));
         //Al momento de mandar la solicitud para crear un tópico se toma la fecha de ese momento
         LocalDateTime fechaCreacion = LocalDateTime.now();
         Topico nuevoTopico = new Topico(registroTopico,fechaCreacion,usuario.get(),curso.get());
@@ -59,5 +65,35 @@ public class TopicoService {
     public Page<DatosRespuestaTopico> listarTopicos(Pageable paginacion) {
         return repositorioTopico.findAll(paginacion)
                 .map(DatosRespuestaTopico::new);
+    }
+
+    public DetallesTopico actualizarTopico(Long id, ActualizarTopico actualizarTopico) {
+        var topico = repositorioTopico.findById(id);
+        if (topico.isEmpty()) {
+            throw new ObjetoInexistenteException("No existe el topico buscado");
+        }
+        var topicoEncontrado = topico.get();
+        if (actualizarTopico.titulo() != null & actualizarTopico.mensaje() != null) {
+            validaciones.forEach(e -> e.validarTopico(actualizarTopico.titulo(),actualizarTopico.mensaje()));
+            topicoEncontrado.setTitulo(actualizarTopico.titulo());
+            topicoEncontrado.setMensaje(actualizarTopico.mensaje());
+        } else  {
+            if (actualizarTopico.mensaje() != null) {
+                topicoEncontrado.setMensaje(actualizarTopico.mensaje());
+            }
+            Long id_curso = actualizarTopico.curso_id();
+            if (id_curso != null) {
+                Curso curso = repositorioCurso.getReferenceById(id_curso);
+                topicoEncontrado.setCurso(curso);
+            }
+        }
+        repositorioTopico.save(topicoEncontrado);
+
+        return new DetallesTopico(topicoEncontrado.getId(),topicoEncontrado.getTitulo(),topicoEncontrado.getMensaje(),
+                topicoEncontrado.getFechaCreacion(),topicoEncontrado.getStatus(),
+                new DatosUsuario(topicoEncontrado.getAutor().getId(),topicoEncontrado.getAutor().getNombreUsuario(),
+                        topicoEncontrado.getAutor().getEmail()),
+                new DatosCurso(topicoEncontrado.getCurso().getId(),topicoEncontrado.getCurso().getNombre(),
+                        topicoEncontrado.getCurso().getCategoria()));
     }
 }

@@ -30,4 +30,19 @@ public class Usuario {
 
     private String contrasena;
 
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Topico> publicaciones;
+
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Respuesta> publicacionesRespondidas;
+
+    public void setPublicaciones(List<Topico> publicaciones) {
+        publicaciones.forEach(e-> e.setAutor(this));
+        this.publicaciones = publicaciones;
+    }
+
+    public void setPublicacionesRespondidas(List<Respuesta> publicacionesRespondidas) {
+        publicacionesRespondidas.forEach(e-> e.setAutor(this));
+        this.publicacionesRespondidas = publicacionesRespondidas;
+    }
 }
