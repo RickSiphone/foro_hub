@@ -4,6 +4,8 @@ import com.aluracursos.forohub.domain.dto.ActualizarTopico;
 import com.aluracursos.forohub.domain.dto.DatosRespuestaTopico;
 import com.aluracursos.forohub.domain.dto.RegistroTopico;
 import com.aluracursos.forohub.service.TopicoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +20,15 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/topicos")
+@SecurityRequirement(name = "bearer-key")
 public class TopicoController {
 
     @Autowired
     private TopicoService topicoService;
 
     @PostMapping
+    @Operation(summary = "Permite registrar un tópico")
+
     public ResponseEntity<DatosRespuestaTopico> registrarTopico(@RequestBody @Valid RegistroTopico registroTopico,
                                                                 UriComponentsBuilder uriComponentsBuilder){
         var topicoCreado = topicoService.registrarTopico(registroTopico);
@@ -32,6 +37,7 @@ public class TopicoController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Permite ver toda la información de algún tópico en específico")
     public ResponseEntity verTopicoEspecifico(@PathVariable Long id) {
         var response = topicoService.visitarTopico(id);
         return ResponseEntity.ok(response);
@@ -39,18 +45,21 @@ public class TopicoController {
 
     //Mostraré todos los datos de usuario y curso o solo los id's?
     @GetMapping
+    @Operation(summary = "Permite ver información general de todos los tópicos disponibles en el foro ordenados del más antiguo al más reciente")
     public ResponseEntity<Page<DatosRespuestaTopico>> listarTopicos(@PageableDefault(sort="fechaCreacion",size = 10) Pageable paginacion) {
         return ResponseEntity.ok(topicoService.listarTopicos(paginacion));
     }
 
     @PutMapping("/{id}")
     @Transactional
+    @Operation(summary = "Permite actualizar la información de un tópico específico. Se puede actualizar el título, mensaje o el curso relacionado al tópico")
     public ResponseEntity actualizarTopico(@PathVariable Long id, @RequestBody @Valid ActualizarTopico actualizarTopico) {
         var response = topicoService.actualizarTopico(id,actualizarTopico);
         return ResponseEntity.accepted().body(response);
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Permite borrar un tópico de la base de datos")
     public ResponseEntity eliminarTopico(@PathVariable Long id) {
         topicoService.borrarTopico(id);
         return ResponseEntity.ok().body("Se ha eliminado con éxito el tópico indicado");
