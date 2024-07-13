@@ -1,7 +1,7 @@
 package com.aluracursos.forohub.controller;
 
 import com.aluracursos.forohub.domain.dto.ActualizarTopico;
-import com.aluracursos.forohub.domain.dto.DatosRespuestaTopico;
+import com.aluracursos.forohub.domain.dto.DatosTopico;
 import com.aluracursos.forohub.domain.dto.RegistroTopico;
 import com.aluracursos.forohub.service.TopicoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,8 +29,8 @@ public class TopicoController {
     @PostMapping
     @Operation(summary = "Permite registrar un tópico")
 
-    public ResponseEntity<DatosRespuestaTopico> registrarTopico(@RequestBody @Valid RegistroTopico registroTopico,
-                                                                UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity<DatosTopico> registrarTopico(@RequestBody @Valid RegistroTopico registroTopico,
+                                                       UriComponentsBuilder uriComponentsBuilder){
         var topicoCreado = topicoService.registrarTopico(registroTopico);
         URI url = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(topicoCreado.id()).toUri();
         return ResponseEntity.created(url).body(topicoCreado);
@@ -46,7 +46,7 @@ public class TopicoController {
     //Mostraré todos los datos de usuario y curso o solo los id's?
     @GetMapping
     @Operation(summary = "Permite ver información general de todos los tópicos disponibles en el foro ordenados del más antiguo al más reciente")
-    public ResponseEntity<Page<DatosRespuestaTopico>> listarTopicos(@PageableDefault(sort="fechaCreacion",size = 10) Pageable paginacion) {
+    public ResponseEntity<Page<DatosTopico>> listarTopicos(@PageableDefault(sort="fechaCreacion",size = 10) Pageable paginacion) {
         return ResponseEntity.ok(topicoService.listarTopicos(paginacion));
     }
 

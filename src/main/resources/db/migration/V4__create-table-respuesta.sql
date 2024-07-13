@@ -1,10 +1,9 @@
 CREATE TABLE respuesta (
     respuesta_id bigint not null auto_increment,
-    mensaje varchar(300) not null,
+    solucion varchar(300) not null,
     topico_id bigint not null,
     fecha_creacion datetime not null,
     autor_id bigint not null,
-    solucion varchar(300) not null,
     CONSTRAINT respuesta_pk PRIMARY KEY(respuesta_id),
     CONSTRAINT respuesta_topico_fk FOREIGN KEY(topico_id)
     REFERENCES topico(topico_id) ON DELETE CASCADE,

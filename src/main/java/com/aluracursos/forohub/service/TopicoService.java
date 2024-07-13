@@ -34,7 +34,7 @@ public class TopicoService {
     @Autowired
     private List<TopicoExistenteValidacion> validaciones;
 
-    public DatosRespuestaTopico registrarTopico(RegistroTopico registroTopico) {
+    public DatosTopico registrarTopico(RegistroTopico registroTopico) {
         Optional<Usuario> usuario = repositorioUsuario.findById(registroTopico.autor_id());
         if (usuario.isEmpty()) {
             throw new ObjetoInexistenteException("El usuario indicado no existe");
@@ -49,7 +49,7 @@ public class TopicoService {
         Topico nuevoTopico = new Topico(registroTopico,fechaCreacion,usuario.get(),curso.get());
         //Agregar validacion para ver si ya existe un topico con el mismo titulo y mensaje
         repositorioTopico.save(nuevoTopico);
-        return new DatosRespuestaTopico(nuevoTopico.getId(),nuevoTopico.getTitulo(),nuevoTopico.getMensaje(),
+        return new DatosTopico(nuevoTopico.getId(),nuevoTopico.getTitulo(),nuevoTopico.getMensaje(),
                 nuevoTopico.getFechaCreacion(),nuevoTopico.getStatus(),nuevoTopico.getAutor().getId(),
                 nuevoTopico.getCurso().getId());
     }
@@ -62,9 +62,9 @@ public class TopicoService {
                 new DatosCurso(topico.getCurso().getId(),topico.getCurso().getNombre(),topico.getCurso().getCategoria()));
     }
 
-    public Page<DatosRespuestaTopico> listarTopicos(Pageable paginacion) {
+    public Page<DatosTopico> listarTopicos(Pageable paginacion) {
         return repositorioTopico.findAll(paginacion)
-                .map(DatosRespuestaTopico::new);
+                .map(DatosTopico::new);
     }
 
     public DetallesTopico actualizarTopico(Long id, ActualizarTopico actualizarTopico) {

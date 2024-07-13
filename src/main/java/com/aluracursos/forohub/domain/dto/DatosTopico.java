@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-public record DatosRespuestaTopico(
+public record DatosTopico(
         Long id,
         String titulo,
         String mensaje,
@@ -14,7 +14,7 @@ public record DatosRespuestaTopico(
         Long autor_id,
         Long curso_id
 ) {
-    public DatosRespuestaTopico(Topico topico) {
+    public DatosTopico(Topico topico) {
         this(topico.getId(),topico.getTitulo(),topico.getMensaje(),
                 topico.getFechaCreacion(),topico.getStatus(),topico.getAutor().getId(),
                 topico.getCurso().getId());
